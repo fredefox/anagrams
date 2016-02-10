@@ -11,14 +11,16 @@ powerset :: [a] -> [[a]]
 powerset = foldr (\x acc -> acc ++ (map ((:) x) acc)) [[]]
 
 anagrams :: (String -> Bool) -> String -> [String]
-anagrams p = filter p . permutations
+anagrams p = removeDuplicates . filter p . permutations
 
 -- Finds words in all possible subsets
 anagramsS :: (String -> Bool) -> String -> [String]
 anagramsS p x = 
     let xs = powerset x
         as = map (anagrams p) xs
-    in Set.toList . Set.fromList $ concat as
+    in removeDuplicates $ concat as
+
+removeDuplicates = Set.toList . Set.fromList
 
 wordList :: IO [String]
 wordList = lines
