@@ -33,7 +33,7 @@ isWord = do
 main = do
     p  <- isWord
     xs <- getArgs
-    forM xs $ \x -> do
+    xs `forM_` \x -> do
         putStr $ x ++ " -> "
         let as = anagramsS p x
         print $ sortBy (\a b -> compare (length a) (length b)) as
