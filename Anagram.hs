@@ -1,7 +1,7 @@
 import Control.Applicative
 import Control.Monad
 import qualified Data.Set as Set
-import Data.List (permutations, sortBy)
+import Data.List (permutations, sortBy, sort, group)
 import Debug.Trace
 import System.Environment
 import Data.Tree
@@ -20,7 +20,7 @@ anagramsS p x =
         as = map (anagrams p) xs
     in removeDuplicates $ concat as
 
-removeDuplicates = Set.toList . Set.fromList
+removeDuplicates = map head . group . sort
 
 wordList :: IO [String]
 wordList = lines
