@@ -20,6 +20,7 @@ anagramsS p x =
         as = map (anagrams p) xs
     in removeDuplicates $ concat as
 
+removeDuplicates :: [String] -> [String]
 removeDuplicates = map head . group . sort
 
 wordList :: IO [String]
@@ -31,14 +32,16 @@ isWord = do
     w <- Set.fromList <$> wordList
     return $ flip Set.member $ w
 
-
+main :: IO ()
 main = do
     p  <- isWord
-    xs <- getArgs
+    xs <- getArgs >>= parse
     xs `forM_` \x -> do
         putStr $ x ++ " -> "
         let as = anagramsS p x
         print $ sortBy (\a b -> compare (length a) (length b)) as
+
+parse = return
 
 {-
 main = do
