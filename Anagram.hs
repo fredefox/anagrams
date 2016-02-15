@@ -34,14 +34,18 @@ isWord = do
 
 main :: IO ()
 main = do
-    p  <- isWord
-    xs <- getArgs >>= parse
+    p         <- isWord
+    (pwr, xs) <- fmap parse getArgs
+    let mainFunc = if pwr then anagrams else anagramsS
     xs `forM_` \x -> do
         putStr $ x ++ " -> "
-        let as = anagramsS p x
+        let as = mainFunc p x
         print $ sortBy (\a b -> compare (length a) (length b)) as
 
-parse = return
+parse :: [String] -> (Bool, [String])
+parse []        = (False, [])
+parse ("-p":xs) = (True, xs)
+parse (x:   xs) = (r, x:xs') where (r, xs') = parse xs
 
 {-
 main = do
