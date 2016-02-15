@@ -47,19 +47,6 @@ parse []        = (False, [])
 parse ("-p":xs) = (True, xs)
 parse (x:   xs) = (r, x:xs') where (r, xs') = parse xs
 
-{-
-main = do
-    ws <- wordList
-    let t = buildTree (map treeFromList ws)
-    myutil t
--}
-{-
-mergeTree [] q = [q]
-mergeTree (p@(Node a as):ps) q@(Node b bs) = if a == b
-    then [Node a (foldl mergeTree bs as)]
-    else p:(mergeTree ps q)
--}
-
 -- merge :: Forest a -> Forest a -> Forest a
 mergeForests [] q = q
 mergeForests p [] = p
