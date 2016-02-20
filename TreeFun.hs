@@ -2,19 +2,18 @@ import TrieBuilder
 import Data.Tree
 import System.Environment
 import Data.List
+import Control.Monad
 
 -- | Builds a suffix-tree from the words in the dictionary-file
 getTrie :: IO (SuffixForest Char)
 getTrie = fmap buildForest getWords
 
 main :: IO ()
-main = getArgs >>= go where
-    go :: [String] -> IO ()
-    go [] = return ()
-    go (x:_) = findAnagram x >>= print
-
-findAnagram :: String -> IO [String]
-findAnagram x = fmap (`anagrams` x) getTrie
+main = do
+    t    <- getTrie
+    args <- getArgs
+    let res = map (anagrams t) args
+    res `forM_` print
 
 dictFile :: String
 dictFile = "/usr/share/dict/words"
