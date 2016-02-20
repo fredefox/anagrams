@@ -4,7 +4,7 @@ import System.Environment
 import Data.List
 
 -- | Builds a suffix-tree from the words in the dictionary-file
-getTrie :: IO (Forest Char)
+getTrie :: IO (SuffixForest Char)
 getTrie = fmap buildForest getWords
 
 main :: IO ()
@@ -23,25 +23,20 @@ dictFile = "/usr/share/dict/words"
 getWords :: IO [String]
 getWords  = lines `fmap` readFile dictFile
 
--- There is a bug in this implementation. It is due to the fact that cannot
--- determine if an arbitrary location in the tree marks the end of the word
--- by just seeing if there are no children from this point on. Minimal example:
--- if the dictionary is: ["a", "ab"], then clearly `anagrams t "a"` should
--- return `["a"]` but it wont.
-anagramsT :: Eq a => Tree a -> [a] -> [[a]]
+anagramsT :: Eq a => SuffixTree a -> [a] -> [[a]]
 -- The empty list has no anagrams
 anagramsT _ [] = []
-anagramsT (Node a []) [x] = [[x] | a == x]
+anagramsT (Node (a, b) _) [x] = [[x] | a == x && b]
 -- If there are no valid words in our dictionary - then there are no anagrams!
 -- anagrams [] _ = []
 anagramsT t xs
     | r `elem` xs = map ((:) r) (anagramsF (subForest t) xs')
     | otherwise   = [] where
-        r   = rootLabel t
+        r   = fst $ rootLabel t
         xs' = delete r xs
 
-anagramsF :: Eq a => Forest a -> [a] -> [[a]]
+anagramsF :: Eq a => SuffixForest a -> [a] -> [[a]]
 anagramsF f xs  = concatMap (`anagramsT` xs) f
 
-anagrams :: Eq a => Forest a -> [a] -> [[a]]
+anagrams :: Eq a => SuffixForest a -> [a] -> [[a]]
 anagrams = anagramsF

@@ -1,14 +1,19 @@
-module TrieBuilder (buildForest) where
+module TrieBuilder (buildForest, SuffixForest, SuffixTree) where
+
 import Data.Tree
 
-buildForest :: Eq a => [[a]] -> Forest a
+type SuffixForest a = Forest (a, Bool)
+type SuffixTree   a = Tree   (a, Bool)
+
+buildForest :: Eq a => [[a]] -> SuffixForest a
 buildForest = foldl (flip addToForest) []
 
-addToForest :: (Eq a) => [a] -> Forest a -> Forest a
+addToForest :: (Eq a) => [a] -> SuffixForest a -> SuffixForest a
 addToForest []     ts     = ts
-addToForest (x:xs) []     = [Node x $ addToForest xs []]
+addToForest (x:xs) []     = [Node e $ addToForest xs []] where
+    e = (x, null xs)
 addToForest (x:xs) (t:ts)
-    | x == rootLabel t  = t':ts
-    | otherwise         = t : addToForest (x:xs) ts
+    | x == (fst . rootLabel) t = t':ts
+    | otherwise                = t : addToForest (x:xs) ts
     where
     t' = t { subForest = addToForest xs $ subForest t }
