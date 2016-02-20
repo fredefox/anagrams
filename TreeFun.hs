@@ -12,8 +12,17 @@ main :: IO ()
 main = do
     t    <- getTrie
     args <- getArgs
-    let res = map (anagrams t) args
-    res `forM_` print
+    case args of
+        [] -> forever $ interactive t
+        xs -> map (anagrams t) xs `forM_` \as -> do
+            as `forM_` (\a -> putStr (a ++ ", "))
+            putStrLn ""
+
+interactive :: SuffixForest Char -> IO ()
+interactive t = getLine >>= p . (anagrams t) where
+    p as = do
+        as `forM_` \a -> putStr (a ++ ", ")
+        putStrLn ""
 
 dictFile :: String
 dictFile = "/usr/share/dict/words"
