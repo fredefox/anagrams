@@ -24,5 +24,3 @@ dictFile = "/usr/share/dict/words"
 
 getWords :: IO [String]
 getWords  = lines `fmap` readFile dictFile
-
-

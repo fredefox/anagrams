@@ -2,3 +2,4 @@
 *.hi
 dist/
 bin/
+.cabal-sandbox/
