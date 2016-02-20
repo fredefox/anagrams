@@ -1,0 +1,9 @@
+This program finds anagrams in a word.
+
+Legal words are read from:
+
+    /usr/share/dict/words
+
+The program can either be invoked with the words to search for anagrams for as
+arguments - or in the absence of these the word will be read interactively.
+
