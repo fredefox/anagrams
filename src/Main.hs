@@ -1,12 +1,14 @@
+import Prelude hiding (words)
 import Anagram
 import System.Environment
 import Control.Monad
+import Options.Applicative
 
 main :: IO ()
 main = do
-    ana  <- fmap anagrams getWords
-    args <- getArgs
-    case args of
+    params <- execParser options
+    ana  <- fmap anagrams $ getWords (dictFile params)
+    case words params of
         [] -> forever $ interactive ana
         xs -> map ana xs `forM_` \as -> do
             as `forM_` (\a -> putStr (a ++ ", "))
@@ -18,9 +20,32 @@ interactive ana = getLine >>= p . ana where
         as `forM_` \a -> putStr (a ++ ", ")
         putStrLn ""
 
-dictFile :: String
-dictFile = "/usr/share/dict/words"
---dictFile = "100-words"
+getWords :: FilePath -> IO [String]
+getWords p = lines `fmap` readFile p
 
-getWords :: IO [String]
-getWords  = lines `fmap` readFile dictFile
+data Params = Params
+    { words    :: [String]
+    , dictFile :: FilePath
+    }
+
+params :: Parser Params
+params = Params
+    <$> (many . strArgument)
+        (  metavar "WORDS"
+        <> help "The words to find anagrams for"
+        )
+    <*> dictOption where
+        dictOption = strOption
+            (  long "dict"
+            <> metavar "PATH"
+            <> help "Path to the dictionary to use"
+            )
+            <|> pure "/usr/share/dict/words"
+
+options = info (helper <*> params)
+    (  fullDesc
+    <> progDesc
+        (  "Finds anagrams in WORDS. If WORDS are not present the program "
+        ++ "runs in interactive mode."
+        )
+    )
