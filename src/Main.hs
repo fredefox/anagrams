@@ -1,6 +1,5 @@
 import Prelude hiding (words)
 import Anagram
-import System.Environment
 import Control.Monad
 import Options.Applicative
 import Data.List hiding (words)
@@ -28,8 +27,8 @@ data Params = Params
     , dictFile :: FilePath
     }
 
-params :: Parser Params
-params = Params
+paramsP :: Parser Params
+paramsP = Params
     <$> (many . strArgument)
         (  metavar "WORDS"
         <> help "The words to find anagrams for"
@@ -42,7 +41,8 @@ params = Params
             )
             <|> pure "/usr/share/dict/words"
 
-options = info (helper <*> params)
+options :: ParserInfo Params
+options = info (helper <*> paramsP)
     (  fullDesc
     <> progDesc
         (  "Finds anagrams in WORDS. If WORDS are not present the program "
