@@ -3,22 +3,22 @@ import Anagram
 import System.Environment
 import Control.Monad
 import Options.Applicative
+import Data.List hiding (words)
+import Text.Printf
 
 main :: IO ()
 main = do
     params <- execParser options
-    ana  <- fmap anagrams $ getWords (dictFile params)
+    ana  <- anagrams `fmap` (getWords . dictFile) params
     case words params of
         [] -> forever $ interactive ana
-        xs -> map ana xs `forM_` \as -> do
-            as `forM_` (\a -> putStr (a ++ ", "))
-            putStrLn ""
+        xs -> xs `forM_` \ x -> printResult x (ana x)
 
 interactive :: (String -> [String]) -> IO ()
-interactive ana = getLine >>= p . ana where
-    p as = do
-        as `forM_` \a -> putStr (a ++ ", ")
-        putStrLn ""
+interactive ana = getLine >>= \ x -> printResult x (ana x)
+
+printResult :: String -> [String] -> IO ()
+printResult x y = printf "%s -> %s\n" x $ intercalate "," y
 
 getWords :: FilePath -> IO [String]
 getWords p = lines `fmap` readFile p
