@@ -3,3 +3,4 @@
 dist/
 bin/
 .cabal-sandbox/
+cabal.sandbox.config
