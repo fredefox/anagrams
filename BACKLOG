@@ -1,0 +1,12 @@
+BACKLOG
+====
+
+Evaluate anagrams concurrently
+----
+
+Partial anagrams
+----
+Add option to find partial anagrams. So for instance `aces` has the
+following anagrams:
+
+    aces, case, sea, as, cs, a, c, e, s
