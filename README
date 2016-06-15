@@ -6,4 +6,3 @@ Legal words are read from:
 
 The program can either be invoked with the words to search for anagrams for as
 arguments - or in the absence of these the words will be read interactively.
-
