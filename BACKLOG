@@ -6,7 +6,17 @@ Evaluate anagrams concurrently
 
 Partial anagrams
 ----
-Add option to find partial anagrams. So for instance `aces` has the
+Add option to find partial anagrams. So for instance `sea` has the
 following anagrams:
 
-    aces, case, sea, as, cs, a, c, e, s
+    a,ae,as,e,ea,es,s,sa,se,sea
+
+Order of dictionary
+----
+There seems to be a bug in `buildForest`. The order of the elements in
+the dictionary are significant:
+
+    > buildForest ["a", "ab"]
+    [Node {rootLabel = ('a',True),  subForest = [Node {rootLabel = ('b',True), subForest = []}]}]
+    > buildForest ["ab", "a"]
+    [Node {rootLabel = ('a',False), subForest = [Node {rootLabel = ('b',True), subForest = []}]}]
