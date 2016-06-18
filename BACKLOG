@@ -20,3 +20,8 @@ the dictionary are significant:
     [Node {rootLabel = ('a',True),  subForest = [Node {rootLabel = ('b',True), subForest = []}]}]
     > buildForest ["ab", "a"]
     [Node {rootLabel = ('a',False), subForest = [Node {rootLabel = ('b',True), subForest = []}]}]
+
+Modularize partial sub-matches
+----
+Make `anagramsT` more modular so that we can add an option to include
+partial anagrams.

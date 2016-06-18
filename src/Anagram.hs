@@ -2,15 +2,19 @@ module Anagram (anagrams) where
 import TrieBuilder
 import Data.Tree
 import Data.List
+import Data.Bool
 
 anagramsT :: Eq a => SuffixTree a -> [a] -> [[a]]
 -- The empty list has no anagrams
 anagramsT _ [] = []
 anagramsT (Node (a, b) _) [x] = [[x] | a == x && b]
 anagramsT t xs
-    | r `elem` xs = map ((:) r) . anagramsF (subForest t) $ xs'
+    -- The first line below includes partial sub-matches
+    | r `elem` xs = bool id ([r]:) b
+        $ map ((:) r) . anagramsF (subForest t) $ xs'
     | otherwise   = [] where
         r   = fst . rootLabel $ t
+        b   = snd . rootLabel $ t
         xs' = delete r xs
 
 anagramsF :: Eq a => SuffixForest a -> [a] -> [[a]]
