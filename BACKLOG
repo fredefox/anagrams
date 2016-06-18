@@ -6,10 +6,12 @@ Evaluate anagrams concurrently
 
 Partial anagrams
 ----
-Add option to find partial anagrams. So for instance `sea` has the
-following anagrams:
-
-    a,ae,as,e,ea,es,s,sa,se,sea
+This program currently finds partial anagrams. It should be
+configurable if we want to match against partial anagrams or only
+exact matches. Also the test-case `prop_anagramInvariant` assumes
+exact matches. It would be nice if we could at the same time somehow
+refactor `anagramsT` so that it can be made more modular whether we
+will include partial sub-matches.
 
 Order of dictionary
 ----
@@ -20,8 +22,3 @@ the dictionary are significant:
     [Node {rootLabel = ('a',True),  subForest = [Node {rootLabel = ('b',True), subForest = []}]}]
     > buildForest ["ab", "a"]
     [Node {rootLabel = ('a',False), subForest = [Node {rootLabel = ('b',True), subForest = []}]}]
-
-Modularize partial sub-matches
-----
-Make `anagramsT` more modular so that we can add an option to include
-partial anagrams.
