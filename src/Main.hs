@@ -9,6 +9,11 @@ import Text.Printf
 import Control.DeepSeq (force)
 import Control.Exception (evaluate)
 
+-- | Finds anagrams
+-- If words are given on the command-line anagrams are found for these
+-- words, printed to stdout and then the program exits. Otherwise
+-- the program will run in interactive mode continually prompting
+-- for new words to find anagrams for until the program is interrupted.
 main :: IO ()
 main = do
     params <- execParser options
