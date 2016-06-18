@@ -1,14 +1,18 @@
+module Main (main) where
+
 import Prelude hiding (words)
 import Anagram
 import Control.Monad
 import Options.Applicative
 import Data.List hiding (words)
 import Text.Printf
+import Control.DeepSeq (force)
+import Control.Exception (evaluate)
 
 main :: IO ()
 main = do
     params <- execParser options
-    ana  <- anagrams `fmap` (getWords . dictFile) params
+    ana  <- anagrams <$> (getWords . dictFile) params >>= evaluate . force
     case words params of
         [] -> forever $ interactive ana
         xs -> xs `forM_` \ x -> printResult x (ana x)
@@ -20,7 +24,7 @@ printResult :: String -> [String] -> IO ()
 printResult x y = printf "%s -> %s\n" x $ intercalate "," y
 
 getWords :: FilePath -> IO [String]
-getWords p = lines `fmap` readFile p
+getWords p = lines <$> readFile p
 
 data Params = Params
     { words    :: [String]
