@@ -16,4 +16,7 @@ addToForest (x:xs) (t:ts)
     | x == (fst . rootLabel) t = t':ts
     | otherwise                = t : addToForest (x:xs) ts
     where
-    t' = t { subForest = addToForest xs $ subForest t }
+    t' = t
+        { subForest = addToForest xs . subForest $ t
+        , rootLabel = fmap (|| null xs) . rootLabel $ t
+        }
