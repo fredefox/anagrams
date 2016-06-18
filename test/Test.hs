@@ -1,14 +1,11 @@
 {-# language TemplateHaskell #-}
 
-module Test where
+module Main where
 
 import Anagram
 import Test.QuickCheck
 import Data.List
-import TrieBuilder
 import Test.HUnit
-
--- TODO: Should we arbitrarily constrain the test-cases to @String@s?
 
 {-| The found anagrams exists in the dictionary -}
 prop_anagramsExist :: Eq a => [[a]] -> [a] -> Bool
@@ -33,3 +30,7 @@ unitTests = TestList
 return []
 runTests :: IO Bool
 runTests = $quickCheckAll
+
+-- Consider using Hspec [http://hspec.github.io/]
+main :: IO ()
+main = runTestTT unitTests >> runTests >> return ()
