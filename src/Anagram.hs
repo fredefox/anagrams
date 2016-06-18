@@ -1,4 +1,5 @@
 module Anagram (anagrams) where
+
 import TrieBuilder
 import Data.Tree
 import Data.List
@@ -20,5 +21,8 @@ anagramsT t xs
 anagramsF :: Eq a => SuffixForest a -> [a] -> [[a]]
 anagramsF f xs  = concatMap (`anagramsT` xs) f
 
+-- | @anagrams xs x@ finds anagrams for @x@ given the dictionary @xs@.
+-- An anagram of @x@ in some set @xs@ is a list such that it's elements are
+-- all elements of @x@ and that the anagram itself is a member of @xs@.
 anagrams :: Eq a => [[a]] -> [a] -> [[a]]
 anagrams = anagramsF . buildForest
